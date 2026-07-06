@@ -5,11 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viza & Francis | Wedding Invitation</title>
 
+    <!-- Meta tags for elegant Facebook/Messenger sharing -->
+    <meta property="og:title" content="Wedding Invitation: Viza & Francis">
+    <meta property="og:description" content="We invite you to celebrate our love. Join us on October 18, 2026.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600">
+
+    <!-- PWA Web Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d2d25">
+
+    <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons for modern UX -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* ================= BASE STYLES ================= */
         * {
             margin: 0;
             padding: 0;
@@ -29,321 +44,646 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ================= HERO ================= */
+        /* Luxury Typography Defaults */
+        h1, h2, h3, .serif-text {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .cursive-text {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* Premium Gold Border Effect globally on wrappers */
+        .gold-border {
+            border: 2px solid #d4af37;
+            position: relative;
+        }
+        .gold-border::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 30px 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* ================= PREMIUM ANIMATIONS & PARTICLES ================= */
+        @keyframes zoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Particle Overlay Systems */
+        #particle-container {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            bottom: 0;
+            background: radial-gradient(circle, #ffe699 0%, rgba(212,175,55,0) 70%);
+            border-radius: 50%;
+            animation: floatParticle 12s linear infinite;
+        }
+        .petal {
+            position: absolute;
+            bottom: 0;
+            background: #ffb7c5;
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.7;
+            animation: floatParticle 15s linear infinite;
+        }
+
+        /* Fade-in animation class applied on scroll via JS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ================= LOADING SCREEN ================= */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #0d2d25;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease;
+        }
+        .loader-logo {
+            font-family: 'Great Vibes', cursive;
+            font-size: 50px;
+            color: #d4af37;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        .loader-bar {
+            width: 150px;
+            height: 2px;
+            background: rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+        .loader-progress {
+            position: absolute;
+            height: 100%;
+            width: 50%;
+            background: #d4af37;
+            animation: loadingAnim 1.5s infinite linear;
+        }
+        @keyframes loadingAnim {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        /* ================= STUNNING ENVELOPE INTRO SCREEN ================= */
+        #envelope-wrapper {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: #091f1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .envelope-box {
+            width: 90%;
+            max-width: 400px;
+            background: #113b31;
+            padding: 40px 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+        .envelope-box:hover {
+            transform: scale(1.02);
+        }
+        .envelope-icon {
+            font-size: 50px;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        /* ================= FLOATING MUSIC CONTROL ================= */
+        #music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 100;
+            background: rgba(212, 175, 55, 0.9);
+            color: #0d2d25;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        #music-control.playing i {
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* ================= HERO SECTION ================= */
         .hero {
             height: 100vh;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
             overflow: hidden;
             background: #0a221c;
             padding: 0 20px;
         }
-
-        .hero img {
+        .hero-bg {
             position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0.4;
             animation: zoom 25s infinite alternate;
         }
-
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, .5);
-        }
-
         .hero-content {
             position: relative;
             z-index: 2;
             width: 100%;
             max-width: 600px;
+            animation: fadeInUp 1.5s ease;
         }
-
         .hero h3 {
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             color: #d4af37;
             margin-bottom: 15px;
-            font-size: 14px;
+            font-size: 16px;
             text-transform: uppercase;
         }
-
         .hero h1 {
             font-family: 'Great Vibes', cursive;
             font-size: 65px;
             color: white;
-            font-weight: 400;
             line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
-
-        .heart {
-            font-size: 22px;
-            color: #d4af37;
-            margin: 5px 0;
-        }
-
         .hero p {
-            margin-top: 20px;
-            font-size: 20px;
+            margin-top: 25px;
+            font-size: 22px;
             font-family: 'Cormorant Garamond', serif;
             letter-spacing: 2px;
         }
 
-        .open-btn {
-            margin-top: 35px;
-            background: #d4af37;
-            color: #0d2d25;
-            border: none;
-            padding: 14px 36px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            transition: .3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .open-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-        }
-
-        @keyframes zoom {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
-
-        /* ================= SECTIONS ================= */
+        /* ================= GENERAL UTILITY SECTIONS ================= */
         section {
-            padding: 80px 20px;
-            max-width: 600px;
+            padding: 90px 24px;
+            max-width: 650px;
             margin: 0 auto;
         }
-
-        h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 32px;
-            margin-bottom: 25px;
+        h2.section-title {
+            font-size: 38px;
+            margin-bottom: 35px;
             color: #d4af37;
-            letter-spacing: 1px;
-        }
-
-        p, blockquote {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #e0e0e0;
-        }
-
-        #details p {
-            margin: 12px 0;
-            font-size: 18px;
-        }
-
-        blockquote {
-            font-style: italic;
-            border-left: 2px solid #d4af37;
-            padding: 0 15px;
+            letter-spacing: 2px;
+            position: relative;
             display: inline-block;
-            text-align: center;
-            max-width: 100%;
+        }
+        h2.section-title::after {
+            content: '♦';
+            display: block;
+            font-size: 14px;
+            margin-top: 5px;
+            color: rgba(212, 175, 55, 0.5);
         }
 
-        /* ================= COUNTDOWN ================= */
+        /* ================= LIVE TIMER SETUP ================= */
         .timer {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-top: 25px;
-            flex-wrap: wrap;
+            margin-top: 30px;
         }
-
-        .timer div {
+        .timer-box {
             background: rgba(255, 255, 255, 0.04);
-            padding: 12px 10px;
-            border-radius: 8px;
+            padding: 16px 10px;
+            border-radius: 12px;
             flex: 1;
             min-width: 70px;
-            max-width: 90px;
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            max-width: 95px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
-
-        .timer span {
+        .timer-box span {
             display: block;
-            font-size: 26px;
+            font-size: 30px;
             font-weight: 600;
             color: #d4af37;
         }
-
-        .timer small {
+        .timer-box small {
             display: block;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             color: #b0b0b0;
+            letter-spacing: 1px;
         }
 
-        /* ================= RSVP BUTTON ================= */
-        #rsvp a {
-            display: inline-block;
-            margin-top: 15px;
+        /* ================= CALENDAR / INTERACTION UX ================= */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
             color: #0d2d25;
             background: #d4af37;
             text-decoration: none;
-            padding: 14px 40px;
+            padding: 12px 30px;
             border-radius: 50px;
             font-weight: 500;
-            font-size: 16px;
-            letter-spacing: 0.5px;
+            font-size: 15px;
             transition: 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-
-        #rsvp a:hover {
+        .action-btn:hover {
             background: #fff;
+            color: #0d2d25;
             transform: translateY(-2px);
         }
-
-        /* ================= FOOTER ================= */
-        footer {
-            padding: 50px 20px;
-            background: #071f1a;
-            border-top: 1px solid rgba(212, 175, 55, 0.08);
+        .map-container {
+            margin-top: 25px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            height: 250px;
         }
+        iframe { width: 100%; height: 100%; border: 0; }
 
-        footer h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
+        /* ================= PREMIUM SWIPE IMAGES GALLERY ================= */
+        .gallery-viewport {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            gap: 15px;
+            padding-bottom: 15px;
+            scrollbar-width: none; /* Hidden scrollbars on premium looks */
         }
+        .gallery-viewport::-webkit-scrollbar { display: none; }
+        .gallery-item {
+            flex: 0 0 85%;
+            scroll-snap-align: center;
+            border-radius: 12px;
+            overflow: hidden;
+            height: 380px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .gallery-item:hover img { transform: scale(1.05); }
 
-        footer p {
-            font-family: 'Great Vibes', cursive;
-            font-size: 28px;
+        /* ================= INTERACTIVE RSVP MODAL SYSTEM ================= */
+        .rsvp-form {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .rsvp-form label {
+            font-size: 14px;
             color: #d4af37;
         }
+        .rsvp-form input, .rsvp-form select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: white;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .rsvp-form input:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
 
-        /* ================= RESPONSIVE MEDIA QUERIES ================= */
+        /* Utility Footer Design positioning */
+        footer {
+            padding: 60px 20px;
+            background: #061814;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        footer p.cursive-text {
+            font-size: 34px; color: #d4af37; margin-top: 10px;
+        }
+
+        /* Social Syncs spacing utility */
+        .social-share-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .icon-btn {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: 0.3s;
+        }
+        .icon-btn:hover { background: #d4af37; color: #0d2d25; }
+
+        /* ================= MOBILE MEDIA BREAKS ================= */
         @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 48px;
-            }
-            .hero h3 {
-                font-size: 12px;
-                letter-spacing: 3px;
-            }
-            .hero p {
-                font-size: 18px;
-            }
-            section {
-                padding: 60px 20px;
-            }
-            h2 {
-                font-size: 28px;
-            }
-            .timer span {
-                font-size: 22px;
-            }
+            .hero h1 { font-size: 50px; }
+            section { padding: 65px 20px; }
+            h2.section-title { font-size: 30px; }
+            .gallery-item { height: 290px; }
         }
     </style>
 </head>
-
 <body>
 
-<header class="hero">
-    <div class="overlay"></div>
-    <div class="hero-content">
-        <h3>Save the Date</h3>
-        <h1>Viza Mia C. Lim</h1>
-        <div class="heart">❤</div>
-        <h1>Francis M. Maglangit</h1>
-        <p>October 18, 2026</p>
-        <button id="openInvitation" class="open-btn">
-            Open Invitation
-        </button>
+    <!-- 1. LOADING SCREEN -->
+    <div id="loading-screen">
+        <div class="loader-logo">V & F</div>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
     </div>
-</header>
 
-<section id="countdown">
-    <h2 id="countdown-title">Countdown to Our Wedding</h2>
-    <div class="timer">
-        <div><span id="days">00</span><small>Days</small></div>
-        <div><span id="hours">00</span><small>Hours</small></div>
-        <div><span id="minutes">00</span><small>Minutes</small></div>
-        <div><span id="seconds">00</span><small>Seconds</small></div>
+    <!-- 2. OPENING ENVELOPE EFFECT -->
+    <div id="envelope-wrapper">
+        <div class="envelope-box gold-border" id="envelopeContainer">
+            <div class="envelope-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <h2 style="font-family:'Cormorant Garamond'; color:#d4af37; font-size:28px; margin-bottom:10px;">Wedding Invitation</h2>
+            <p style="font-size:14px; letter-spacing:2px; text-transform:uppercase;">To Our Beloved Guests</p>
+            <button class="action-btn" style="margin-top:25px;">Open Invitation</button>
+        </div>
     </div>
-</section>
 
-<section id="details">
-    <h2>Wedding Details</h2>
-    <p>📅 October 18, 2026</p>
-    <p>🕚 11:00 AM</p>
-    <p>📍 Jurassic Park, Maranding, Lala</p>
-</section>
+    <!-- BACKGROUND MUSIC CONTAINER -->
+    <!-- Swap the SRC URL variable below easily to change tracks safely -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+    </audio>
+    <div id="music-control"><i class="fa-solid fa-music"></i></div>
 
-<section id="verse">
-    <h2>Genesis 2:24</h2>
-    <blockquote>
-        "Therefore a man shall leave his father and mother and hold fast to his wife, and they shall become one flesh."
-    </blockquote>
-</section>
+    <!-- FLOATING GOLD AND FLOWER ELEMENT CONTAINER -->
+    <div id="particle-container"></div>
 
-<section id="gallery">
-    <h2>Our Memories</h2>
+    <!-- 3. PREMIUM HERO SECTION -->
+    <header class="hero">
+        <div class="overlay"></div>
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200" alt="Background View" class="hero-bg">
+        <div class="hero-content">
+            <h3>Save the Date</h3>
+            <h1>Viza Mia C. Lim</h1>
+            <div class="heart"><i class="fa-solid fa-heart"></i></div>
+            <h1>Francis M. Maglangit</h1>
+            <p>October 18, 2026</p>
+        </div>
+    </header>
+
+    <!-- 4. INTERACTIVE COUNTDOWN SECTION -->
+    <section id="countdown" class="reveal">
+        <h2 class="section-title" id="countdown-title">The Countdown</h2>
+        <div class="timer">
+            <div class="timer-box"><span>00</span><small>Days</small></div>
+            <div class="timer-box"><span>00</span><small>Hours</small></div>
+            <div class="timer-box"><span>00</span><small>Minutes</small></div>
+            <div class="timer-box"><span>00</span><small>Seconds</small></div>
+        </div>
+        <div style="margin-top: 30px;">
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Viza+%26+Francis+Wedding&dates=20261018T030000Z/20261018T090000Z&details=Join+us+for+our+wedding+celebration!&location=Jurassic+Park,+Maranding,+Lala" target="_blank" class="action-btn">
+                <i class="fa-solid fa-calendar-plus"></i> Add to Calendar
+            </a>
+        </div>
     </section>
 
-<section id="rsvp">
-    <h2>RSVP</h2>
-    <a href="mailto:francismaglangit0@gmail.com">
-        Confirm Attendance
-    </a>
-</section>
+    <!-- 5. LUXURY HOLY VERSE -->
+    <section id="verse" class="reveal">
+        <div class="glass-card">
+            <h2 style="color:#d4af37; margin-bottom:15px;">Genesis 2:24</h2>
+            <blockquote>
+                "Therefore a man shall leave his father and mother and hold fast to his wife, and they shall become one flesh."
+            </blockquote>
+        </div>
+    </section>
 
-<footer>
-    <h2>We Can't Wait to Celebrate With You</h2>
-    <p>Viza ❤ Francis</p>
-</footer>
+    <!-- 6. WEDDING DETAILS & GOOGLE MAPS INTEGRATION -->
+    <section id="details" class="reveal">
+        <h2 class="section-title">Wedding Details</h2>
+        <div class="glass-card" style="text-align: left; display: flex; flex-direction: column; gap:15px;">
+            <p><i class="fa-solid fa-calendar" style="color:#d4af37; margin-right:10px;"></i> <strong>Date:</strong> October 18, 2026</p>
+            <p><i class="fa-solid fa-clock" style="color:#d4af37; margin-right:10px;"></i> <strong>Time:</strong> 11:00 AM</p>
+            <p><i class="fa-solid fa-location-dot" style="color:#d4af37; margin-right:10px;"></i> <strong>Venue:</strong> Jurassic Park, Maranding, Lala</p>
+            
+            <!-- Live functional map iframe embedding -->
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.2713176766467!2d123.7547!3d7.8144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwNDgnNTEuOCJOIDEyM8KwNDUnMTYuOSJF!5e0!3m2!1sen!2sph!4v1690000000000!5m2!1sen!2sph"></iframe>
+            </div>
+        </div>
+    </section>
 
-<script>
-    // 1. Smooth Scroll Feature
-    document.getElementById('openInvitation').addEventListener('click', function() {
-        document.getElementById('countdown').scrollIntoView({ 
-            behavior: 'smooth' 
+    <!-- 7. SWIPE-READY MODERN PHOTO GALLERY -->
+    <section id="gallery" class="reveal">
+        <h2 class="section-title">Our Memories</h2>
+        <p style="font-size:13px; color:#aaa; margin-bottom:15px; font-style:italic;"><i class="fa-solid fa-hand-pointer"></i> Swipe sideways to browse pictures</p>
+        <div class="gallery-viewport">
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=500" alt="Memory 1"></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=500" alt="Memory 2"></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=500" alt="Memory 3"></div>
+        </div>
+    </section>
+
+    <!-- 8. INTERACTIVE RSVP FORM -->
+    <section id="rsvp" class="reveal">
+        <h2 class="section-title">R.S.V.P</h2>
+        <div class="glass-card">
+            <!-- Form links natively to email via mailto fallback trigger actions -->
+            <form class="rsvp-form" action="mailto:francismaglangit0@gmail.com" method="GET" enctype="text/plain">
+                <div>
+                    <label>Your Full Name</label>
+                    <input type="text" name="Guest Name" placeholder="Please enter your name" required>
+                </div>
+                <div>
+                    <label>Will you attend?</label>
+                    <select name="Attendance Status" required>
+                        <option value="Yes, joyfully accepting">Yes, I will attend</option>
+                        <option value="No, regretfully declining">Regretfully, I cannot come</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Number of Companions</label>
+                    <select name="Total Companions">
+                        <option value="0">Just Me</option>
+                        <option value="1">1 Person</option>
+                        <option value="2">2 People</option>
+                    </select>
+                </div>
+                <button type="submit" class="action-btn" style="width:100%; justify-content:center; margin-top:10px;">
+                    Send Attendance
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 9. PREMIUM UTILITY FOOTER -->
+    <footer>
+        <h2>We Can't Wait to Celebrate With You</h2>
+        <p class="cursive-text">Viza & Francis</p>
+        
+        <div class="social-share-group">
+            <div class="icon-btn" id="shareBtn" title="Share Invitation Link"><i class="fa-solid fa-share-nodes"></i></div>
+            <div class="icon-btn" id="qrBtn" title="Show Invitation QR Code"><i class="fa-solid fa-qrcode"></i></div>
+        </div>
+    </footer>
+
+    <!-- ================= PREMIUM APPLICATION SCRIPT LOGIC ================= -->
+    <script>
+        // A. Remove Loading Panel Screen on Load Completion
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loading-screen');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 800);
         });
-    });
 
-    // 2. Countdown Timer Feature
-    const weddingDate = new Date("Oct 18, 2026 11:00:00").getTime();
+        // B. Opening Envelope & Audio Native Trigger Sequence
+        const envelope = document.getElementById('envelope-wrapper');
+        const audio = document.getElementById('bg-music');
+        const musicCtrl = document.getElementById('music-control');
 
-    const timerInterval = setInterval(function() {
-        const now = new Date().getTime();
-        const difference = weddingDate - now;
+        document.getElementById('envelopeContainer').addEventListener('click', () => {
+            envelope.style.transform = 'translateY(-100vh)';
+            // Plays audio safely after direct human viewport interaction context bounds rules
+            audio.play().catch(() => console.log("Audio autoplay restricted. Click music control."));
+            musicCtrl.classList.add('playing');
+        });
 
-        // Math calculations for time parts
-        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((difference % (1000 * 60)) / 1000);
+        // C. Background Track Audio Playback Logic Control Button
+        musicCtrl.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                musicCtrl.classList.add('playing');
+            } else {
+                audio.pause();
+                musicCtrl.classList.remove('playing');
+            }
+        });
 
-        // Update HTML text elements safely, adding leading zeros if single digits
-        document.getElementById("days").innerText = d < 10 ? "0" + d : d;
-        document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
-        document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
-        document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
-
-        // Action to perform if countdown finishes
-        if (difference < 0) {
-            clearInterval(timerInterval);
-            document.getElementById("countdown-title").innerText = "The Wedding Day is Here!";
-            document.getElementById("days").innerText = "00";
-            document.getElementById("hours").innerText = "00";
-            document.getElementById("minutes").innerText = "00";
-            document.getElementById("seconds").innerText = "00";
+        // D. Floating Sparkles and Flower Leaf Particle Generator Logic
+        const pContainer = document.getElementById('particle-container');
+        function createParticle(className) {
+            const element = document.createElement('div');
+            element.className = className;
+            element.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * (className === 'particle' ? 6 : 14) + 4;
+            element.style.width = size + 'px';
+            element.style.height = size + 'px';
+            element.style.animationDuration = Math.random() * 7 + 8 + 's';
+            pContainer.appendChild(element);
+            setTimeout(() => element.remove(), 15000);
         }
-    }, 1000);
-</script>
+        setInterval(() => createParticle('particle'), 800);
+        setInterval(() => createParticle('petal'), 1200);
 
+        // E. Live Dynamic Realtime Countdown Calculation 
+        const targetDate = new Date("Oct 18, 2026 11:00:00").getTime();
+        const boxes = document.querySelectorAll('.timer-box span');
+
+        setInterval(() => {
+            const remaining = targetDate - new Date().getTime();
+            if (remaining <= 0) {
+                document.getElementById('countdown-title').innerText = "Our Big Day Is Here!";
+                return;
+            }
+            const d = Math.floor(remaining / 86400000);
+            const h = Math.floor((remaining % 86400000) / 3600000);
+            const m = Math.floor((remaining % 3600000) / 60000);
+            const s = Math.floor((remaining % 60000) / 1000);
+
+            boxes[0].innerText = d < 10 ? '0'+d : d;
+            boxes[1].innerText = h < 10 ? '0'+h : h;
+            boxes[2].innerText = m < 10 ? '0'+m : m;
+            boxes[3].innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+
+        // F. Smooth Scroll Animation Intersection Observers
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.15 });
+        revealElements.forEach(el => observer.observe(el));
+
+        // G. Native Mobile Web API System Sharing Interfacing Linkage
+        document.getElementById('shareBtn').addEventListener('click', async () => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'Viza & Francis Wedding', url: window.location.href });
+                } catch (err) { console.log(err); }
+            } else {
+                alert("Invitation Link Copied to Clipboard!");
+                navigator.clipboard.writeText(window.location.href);
+            }
+        });
+
+        // H. Built-In QR Code Alert Generation Display Modals
+        document.getElementById('qrBtn').addEventListener('click', () => {
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.href)}`;
+            const qrWindow = window.open("", "Invitation QR Code", "width=250,height=250");
+            qrWindow.document.write(`<div style="display:flex;justify-content:center;align-items:center;height:100vh;"><img src="${qrUrl}" alt="QR"></div>`);
+        });
+
+        // I. Optional Service Worker Registration Setup mapping for PWA support functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+        }
+    </script>
 </body>
 </html>

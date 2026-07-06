@@ -1,0 +1,15 @@
+{
+  "name": "Viza and Francis Wedding Invitation",
+  "short_name": "V&F Wedding",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0d2d25",
+  "theme_color": "#0d2d25",
+  "icons": [
+    {
+      "src": "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=192",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
